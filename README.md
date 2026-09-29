@@ -2,37 +2,38 @@
 
 Plataforma Web moderna desenvolvida com **HTML5, CSS3 e JavaScript puro (Vanilla - sem frameworks)**, com arquitetura **Mobile-First** e integrada ao banco de dados relacional **PostgreSQL** rodando na **porta 5432**.
 
-O sistema foi modelado especificamente para uma **Locadora de Jogos Eletrônicos Xbox**, com catálogo de títulos exclusivos, controle de clientes e gerenciamento ágil de locações e devoluções. Todas as telas utilizam linguagem comercial, intuitiva e livre de jargões técnicos.
+O sistema foi modelado para uma **Locadora de Jogos Eletrônicos Xbox**, com catálogo de títulos exclusivos, controle de clientes e gerenciamento de locações e devoluções. Todas as telas utilizam linguagem comercial, intuitiva e sem termos técnicos de programação.
 
 ---
 
 ## 📋 Sumário
 1. [Sobre a Locadora](#-sobre-a-locadora)
 2. [Estrutura do Banco de Dados (`locadora_xbox`)](#-estrutura-do-banco-de-dados-locadora_xbox)
-3. [Tecnologias Utilizadas](#-tecnologias-utilizadas)
-4. [Como Executar o Projeto em 1 Clique](#-como-executar-o-projeto)
+3. [Como Rodar no Computador da Escola (SEM .bat - Passo a Passo)](#-como-rodar-no-computador-da-escola-sem-bat---passo-a-passo)
+4. [Como Rodar em Casa com os Scripts .bat](#-como-rodar-em-casa-com-os-scripts-bat)
 5. [Como Conectar e Visualizar no DBeaver](#-como-conectar-e-visualizar-no-dbeaver)
-6. [Módulos do Sistema (CRUD Completo)](#-módulos-do-sistema-crud-completo)
-7. [Regras de Negócio e Validações](#-regras-de-negócio-e-validações)
-8. [Estrutura de Arquivos](#-estrutura-de-arquivos)
+6. [Como Acessar no Celular (Mobile Testing)](#-como-acessar-no-celular-mobile-testing)
+7. [Módulos do Sistema (CRUD Completo)](#-módulos-do-sistema-crud-completo)
+8. [Regras de Negócio e Validações](#-regras-de-negócio-e-validações)
+9. [Estrutura de Arquivos](#-estrutura-de-arquivos)
 
 ---
 
 ## 🎮 Sobre a Locadora
 
-A **Xbox Locadora** simula a experiência de um aplicativo nativo para celular, permitindo aos atendentes e clientes:
-- Explorar o catálogo de jogos exclusivos Xbox (como *Halo Infinite*, *Forza Horizon 5*, *Starfield*, *Senua's Saga*, *Gears 5* e *Hi-Fi RUSH*).
-- Acompanhar quais jogos estão disponíveis e quais estão alugados no momento.
-- Realizar cadastro de novos clientes com validação de dados em tempo real.
-- Registrar locações e realizar a devolução rápida com **1 toque**.
+A **Xbox Locadora** simula a experiência de um aplicativo mobile no navegador, permitindo:
+- Explorar o catálogo de jogos exclusivos Xbox (*Halo Infinite*, *Forza Horizon 5*, *Starfield*, *Senua's Saga*, *Gears 5*, *Hi-Fi RUSH*, etc.).
+- Acompanhar quais títulos estão disponíveis e quais estão alugados no momento.
+- Realizar cadastro de novos clientes com validações em tempo real.
+- Registrar locações e realizar devoluções rápidas com **1 toque**.
 
-A interface foi projetada para uso em telas sensíveis ao toque, com botões amplos ($\ge 44\text{px}$), barra de navegação inferior estilo app, modais fluidos e alertas visuais animados (*toasts*).
+A interface foi projetada para telas sensíveis ao toque, com botões amplos ($\ge 44\text{px}$), barra de navegação inferior estilo app, modais nativos e avisos animados (*toasts*).
 
 ---
 
 ## 🗄️ Estrutura do Banco de Dados (`locadora_xbox`)
 
-O banco de dados foi nomeado como **`locadora_xbox`** e substituiu a antiga tabela de livros pela tabela oficial **`jogo`**:
+O banco de dados relacional oficial chama-se **`locadora_xbox`**:
 
 | Tabela | Descrição | Principais Campos |
 | :--- | :--- | :--- |
@@ -41,162 +42,161 @@ O banco de dados foi nomeado como **`locadora_xbox`** e substituiu a antiga tabe
 | **`categoria`** | Gêneros dos jogos (Ação, RPG, Corrida, etc.) | `id_categoria`, `nome` (único) |
 | **`locacao`** | Registro de locações e devoluções | `id_locacao`, `id_cliente`, `id_jogo`, `data_locacao`, `data_devolucao`, `status` |
 
-> 📌 **Compatibilidade Pedagógica**: O script SQL também cria *views* automáticas (`aluno`, `livro`, `emprestimo`), garantindo que qualquer consulta legada do professor continue funcionando perfeitamente sem erros.
+> 📌 **Compatibilidade Pedagógica**: O script SQL inclui *views* automáticas (`aluno`, `livro`, `emprestimo`), garantindo que consultas que utilizem os nomes antigos do modelo da biblioteca continuem funcionando sem falhas.
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## 🏫 Como Rodar no Computador da Escola (SEM .bat - Passo a Passo)
 
-### Front-end (100% Vanilla - Sem Frameworks)
-- **HTML5 Semântico**: Tags nativas acessíveis, navegação SPA e diálogos modais `<dialog>`.
-- **CSS3 Moderno**: Abordagem Mobile-First, flexbox, CSS Grid, variáveis CSS, suporte a safe-area de celulares e transições.
-- **JavaScript (ES6+)**: Fetch API, manipulação de DOM, buscas e filtros em tempo real, validações client-side e feedback visual com *toasts*.
+Caso as políticas de segurança da escola impeçam a execução de arquivos `.bat` ou você prefira rodar manualmente pelo terminal / VS Code, siga este passo a passo garantido:
 
-### Backend
-- **Node.js (Módulo nativo `http`)**: Servidor e API REST construídos puramente em JavaScript vanilla, sem frameworks pesados (sem Express).
-- **Driver `pg` (node-postgres)**: Conexão direta de alto desempenho com o PostgreSQL na porta 5432.
+### 1. Preparar o Banco no DBeaver / pgAdmin da Escola
+Nos computadores do laboratório, o PostgreSQL geralmente já está instalado e rodando como serviço do Windows na porta **5432**.
 
-### Banco de Dados
-- **PostgreSQL 16**: Porta padrão **5432**, banco **`locadora_xbox`**.
-
----
-
-## 🚀 Como Executar e Acessar (Local e no Celular via IPv4)
-
-### Opção 1: Inicialização em 1 Clique (Recomendada no Windows)
-Na pasta do projeto, basta dar **dois cliques** no arquivo:
-```
-iniciar_tudo.bat
-```
-Ele irá automaticamente iniciar o PostgreSQL na porta 5432, o servidor Node.js e abrir o navegador.
+1. Abra o **DBeaver** ou **pgAdmin**.
+2. Conecte-se ao PostgreSQL local (porta `5432`, usuário `postgres`).
+3. Crie um novo banco de dados chamado **`locadora_xbox`**:
+   - No DBeaver: Clique com botão direito em *Databases* > *Criar Novo Banco de Dados* > Nome: `locadora_xbox`.
+4. Abra o arquivo **`locadora_xbox.sql`** dentro do DBeaver/pgAdmin.
+5. Clique em **Executar Script** (atalho `Alt + X` ou ícone de play no DBeaver).
+6. Pronto! As tabelas `jogo`, `cliente`, `categoria` e `locacao` serão criadas e populadas com os dados do catálogo Xbox.
 
 ---
 
-### 📱 Como Acessar pelo Celular ou outros Dispositivos
+### 2. Rodar a Aplicação pelo Terminal (CMD / PowerShell / VS Code)
 
-O servidor está configurado para responder em **todas as interfaces de rede (`0.0.0.0`)**:
-
-1. **Pelo Celular (no mesmo Wi-Fi da sua casa/rede)**:
-   Abra o navegador do celular e digite:
-   👉 **`http://192.168.1.6:3000`**
-
-2. **Pelo IP Público IPv4**:
-   O IP público da sua conexão de internet é:
-   👉 **`http://45.172.97.186:3000`**
-   *(Nota: Se o seu roteador bloquear conexões externas diretas via NAT/firewall do provedor, use o atalho abaixo).*
-
-3. **Acesso Público Global (4G / 5G / Qualquer Rede Externa)**:
-   Dê dois cliques no arquivo:
-   👉 **`acesso_publico_internet.bat`**
-   Ele gera na hora um link público oficial seguro (HTTPS) para você abrir no celular via 4G/5G ou enviar para qualquer pessoa testar pela internet!
-
-
----
-
-### Opção 2: Pelo Terminal (PowerShell ou CMD)
-
-1. Inicie o banco de dados:
-   ```cmd
-   iniciar_banco.bat
+1. Abra a pasta do projeto no **VS Code** (ou abra o **Prompt de Comando** / **PowerShell** na pasta do projeto).
+2. Instale as dependências do Node.js (necessário apenas na primeira vez):
+   ```bash
+   npm install
    ```
-
-2. Inicie o servidor da aplicação:
-   ```cmd
+3. Inicie o servidor da aplicação:
+   ```bash
    node server.js
    ```
 
-3. Acesse no navegador:
-   [http://localhost:3000](http://localhost:3000)
+> 💡 **Dica (Senha diferente no PC da escola)**:  
+> Se o PostgreSQL da escola usar uma senha diferente de `postgres`, você pode informá-la diretamente no comando:  
+> - **No PowerShell**:  
+>   ```powershell
+>   $env:DB_USER="postgres"; $env:DB_PASSWORD="SENHA_DA_ESCOLA"; node server.js
+>   ```  
+> - **No CMD**:  
+>   ```cmd
+>   set DB_PASSWORD=SENHA_DA_ESCOLA && node server.js
+>   ```
+
+---
+
+### 3. Acessar a Plataforma
+Abra o navegador (Chrome, Edge) e acesse:
+👉 **[http://localhost:3000](http://localhost:3000)**
+
+---
+
+## 🏠 Como Rodar em Casa com os Scripts .bat
+
+Se estiver no seu computador pessoal, você pode iniciar tudo com **2 cliques**:
+
+1. Dê dois cliques no arquivo:
+   ```
+   iniciar_tudo.bat
+   ```
+   Ele verifica se a pasta `node_modules` existe (instalando automaticamente se necessário), inicia o banco de dados e abre o navegador.
+
+2. Outros atalhos úteis:
+   - `iniciar_banco.bat`: Inicia apenas o banco na porta 5432.
+   - `parar_banco.bat`: Finaliza o banco de dados.
+   - `resetar_banco.bat`: Restaura o banco `locadora_xbox` para os dados iniciais.
+   - `abrir_dbeaver.bat`: Abre o DBeaver diretamente.
 
 ---
 
 ## 🐘 Como Conectar e Visualizar no DBeaver
 
-O banco de dados está ativo na porta 5432 e pronto para ser visualizado no **DBeaver**.
-
-### Credenciais de Acesso:
+### Credenciais Padrão:
 - **Host / Servidor**: `localhost` (ou `127.0.0.1`)
 - **Porta**: `5432`
 - **Banco de Dados**: `locadora_xbox`
 - **Usuário**: `postgres`
 - **Senha**: `postgres`
 
-### Passo a Passo no DBeaver:
-1. Abra o DBeaver (ou execute [`abrir_dbeaver.bat`](file:///C:/Users/eduar/.gemini/antigravity/scratch/xbox-biblioteca/abrir_dbeaver.bat)).
-2. Clique no menu **Banco de Dados** > **Nova Conexão**.
-3. Selecione **PostgreSQL** e clique em **Avançar**.
-4. Configure as opções:
-   - **Host**: `localhost`
-   - **Porta**: `5432`
-   - **Banco de dados**: `locadora_xbox`
-   - **Nome de usuário**: `postgres`
-   - **Senha**: `postgres`
-5. Clique em **Testar Conexão...** e depois em **Concluir**.
-6. No painel esquerdo do DBeaver, navegue em:
+### Passo a Passo:
+1. Abra o DBeaver.
+2. Menu **Banco de Dados** > **Nova Conexão** > selecione **PostgreSQL**.
+3. Preencha os campos com as credenciais acima.
+4. Clique em **Testar Conexão** e depois em **Concluir**.
+5. No painel esquerdo, navegue em:
    `locadora_xbox` ➔ `Schemas` ➔ `public` ➔ `Tabelas (Tables)`.
-7. Dê dois cliques em qualquer tabela (`jogo`, `cliente`, `locacao`, `categoria`) e abra a aba **Dados** para ver as locações em tempo real ou a aba **Diagrama ER** para ver os relacionamentos.
+6. Dê dois cliques em qualquer tabela para ver os dados atualizados em tempo real ou no **Diagrama ER** para ver os relacionamentos.
+
+---
+
+## 📱 Como Acessar no Celular (Mobile Testing)
+
+Como o sistema foi feito com foco em dispositivos móveis, você pode testá-lo diretamente no celular:
+
+1. Conecte o celular na **mesma rede Wi-Fi** do computador.
+2. Quando você inicia o servidor (`node server.js`), ele exibe o IP local da sua máquina:
+   ```
+   Local (neste PC):        http://localhost:3000
+   Celular (mesmo Wi-Fi):   http://192.168.x.x:3000
+   ```
+3. Digite o endereço exibido no navegador do celular (Chrome ou Safari) para ver a interface em tela cheia com toque nativo!
 
 ---
 
 ## 📱 Módulos do Sistema (CRUD Completo)
 
-### 1. Catálogo de Jogos (`jogo`)
-- **Cadastrar**: Título, Desenvolvedora, Ano de lançamento e Gênero.
-- **Consultar**: Filtro por gênero e busca em tempo real por título ou estúdio.
-- **Indicador de Disponibilidade**: Badge verde `Disponível` ou amarela `Alugado` calculada dinamicamente com base nas locações em aberto.
-- **Alterar & Excluir**: Atualização de dados cadastrais e remoção com confirmação de segurança.
+1. **Catálogo de Jogos (`jogo`)**:
+   - Cadastrar, listar, alterar e excluir jogos.
+   - Filtros por gênero e busca em tempo real por título ou desenvolvedora.
+   - Badge inteligente de disponibilidade (`Disponível` / `Alugado`).
 
-### 2. Clientes da Locadora (`cliente`)
-- **Cadastrar**: Nome completo, e-mail e data de nascimento.
-- **Consultar**: Busca por nome ou e-mail, exibição da quantidade de jogos em posse no momento.
-- **Alterar & Excluir**: Edição e exclusão segura.
+2. **Clientes da Locadora (`cliente`)**:
+   - Cadastro com nome, e-mail único e data de nascimento.
+   - Contador de jogos alugados no momento por cada cliente.
 
-### 3. Controle de Locações (`locacao`)
-- **Registrar Locação**: Seleção do cliente e do jogo através de dropdowns inteligentes, data de saída e situação inicial.
-- **Filtros por Abas**: `Todas as Locações`, `Em Aberto (Alugados)` e `Devolvidos`.
-- **Devolução Rápida (1 Toque)**: Botão verde *"Devolver Jogo"* que preenche automaticamente a data de devolução com o dia de hoje e altera o status para *Devolvido*.
-- **Editar & Cancelar**: Ajuste de datas e cancelamento de registros.
+3. **Controle de Locações (`locacao`)**:
+   - Registro de novas locações associando cliente e jogo.
+   - Filtros rápidos por abas (`Todas`, `Em Aberto`, `Devolvidos`).
+   - Botão **"Devolver Jogo"** com 1 toque (preenche a devolução com a data de hoje).
 
-### 4. Gêneros de Jogos (`categoria`)
-- **Cadastrar & Editar**: Cadastro de novos gêneros (Ação, RPG, Corrida, etc.).
-- **Consultar**: Contador dinâmico de títulos vinculados a cada gênero.
-- **Excluir**: Remoção segura que protege o catálogo caso haja jogos vinculados.
+4. **Gêneros (`categoria`)**:
+   - Cadastro e edição de gêneros.
+   - Contador automático de títulos em cada categoria.
 
 ---
 
 ## 🛡️ Regras de Negócio e Validações
 
-O sistema trata todas as regras de forma suave e amigável:
 - **E-mail Único**: Impede cadastro duplicado avisando: *"Este e-mail já está cadastrado para outro cliente."*
 - **Gênero Único**: Impede categorias repetidas.
-- **Consistência de Datas**: A data de devolução não pode ser anterior à data em que o jogo foi retirado.
-- **Proteção de Integridade**: Ao tentar excluir um cliente ou jogo com histórico de locações ativas, o sistema avisa com clareza a restrição sem exibir códigos de erro crus.
+- **Consistência de Datas**: A data de devolução não pode ser anterior à data de saída do jogo.
+- **Proteção de Integridade**: Ao tentar excluir um cliente ou jogo com locações vinculadas, o sistema orienta o usuário de forma amigável, sem códigos crus de banco.
 
 ---
 
 ## 📂 Estrutura de Arquivos
 
 ```
-xbox-biblioteca/
-├── locadora_xbox.sql       # Script oficial do banco de dados (locadora_xbox)
-├── server.js               # Servidor Web & API REST nativa (Node.js Vanilla + pg)
-├── package.json            # Metadados do projeto
-├── README.md               # Este guia completo de instruções
+locadora-xbox/
+├── locadora_xbox.sql       # Script SQL do banco de dados (tabelas e dados)
+├── server.js               # Servidor Web & API REST nativa (Node.js puro + pg)
+├── package.json            # Metadados e dependências (pg)
+├── README.md               # Documentação e instruções de uso
+├── .gitignore              # Ignora node_modules/ e arquivos locais
 │
-├── iniciar_tudo.bat        # Inicializador em 1 clique (Banco + Servidor + Navegador)
-├── iniciar_banco.bat       # Inicia o PostgreSQL na porta 5432
-├── parar_banco.bat         # Finaliza o PostgreSQL com segurança
-├── resetar_banco.bat       # Restaura o banco 'locadora_xbox' com dados padrão
-├── abrir_dbeaver.bat       # Abre o DBeaver automaticamente
+├── iniciar_tudo.bat        # Inicializador completo automático
+├── iniciar_banco.bat       # Inicia o PostgreSQL
+├── parar_banco.bat         # Finaliza o PostgreSQL
+├── resetar_banco.bat       # Restaura os dados padrão no banco
+├── abrir_dbeaver.bat       # Abre o DBeaver
 │
-├── pgsql/                  # Binários portáteis do PostgreSQL 16
-│   ├── bin/                # Utilitários (pg_ctl, psql, createdb)
-│   └── data/               # Dados do banco de dados local
-│
-└── public/                 # Front-End (HTML5, CSS3, Vanilla JS)
+└── public/                 # Front-End (HTML5, CSS3, JavaScript Vanilla)
     ├── index.html          # Interface da aplicação SPA
     ├── css/
     │   └── style.css       # Estilos Mobile-First tema escuro Xbox
     └── js/
-        └── app.js          # Lógica do app, rotas SPA e integração com a API
+        └── app.js          # Lógica do app, rotas e integração REST
 ```

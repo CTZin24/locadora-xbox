@@ -4,40 +4,41 @@ echo ========================================================
 echo   🐘 INICIANDO BANCO DE DADOS NA PORTA 5432
 echo ========================================================
 
-rem Verifica se ja esta rodando na porta 5432
+rem 1. Verifica se o PostgreSQL ja esta em execucao na porta 5432 (ex: servico no PC da escola)
 netstat -ano | findstr ":5432 " | findstr "LISTENING" > nul
 if %errorlevel% == 0 (
-    echo [OK] O banco de dados ja esta ativo na porta 5432!
+    echo [OK] O PostgreSQL ja esta ativo e respondendo na porta 5432!
     goto print_info
 )
 
-rem Localiza os binarios do PostgreSQL
+rem 2. Se houver pasta local pgsql portatil dentro do projeto
 if exist "%~dp0pgsql\bin\pg_ctl.exe" (
-    set "PG_BIN=%~dp0pgsql\bin"
-    set "PG_DATA=%~dp0pgsql\data"
-    set "PG_LOG=%~dp0pgsql\pgsql.log"
-) else if exist "C:\Users\eduar\.gemini\antigravity\scratch\xbox-biblioteca\pgsql\bin\pg_ctl.exe" (
-    set "PG_BIN=C:\Users\eduar\.gemini\antigravity\scratch\xbox-biblioteca\pgsql\bin"
-    set "PG_DATA=C:\Users\eduar\.gemini\antigravity\scratch\xbox-biblioteca\pgsql\data"
-    set "PG_LOG=C:\Users\eduar\.gemini\antigravity\scratch\xbox-biblioteca\pgsql\pgsql.log"
-) else if exist "C:\Program Files\PostgreSQL\16\bin\pg_ctl.exe" (
-    set "PG_BIN=C:\Program Files\PostgreSQL\16\bin"
-    set "PG_DATA=C:\Program Files\PostgreSQL\16\data"
-    set "PG_LOG=%~dp0pgsql.log"
-) else (
-    echo [Aviso] PostgreSQL local nao encontrado. Tentando servico do sistema...
+    echo Iniciando cluster local do PostgreSQL...
+    "%~dp0pgsql\bin\pg_ctl.exe" -D "%~dp0pgsql\data" -l "%~dp0pgsql\pgsql.log" start
+    timeout /t 2 > nul
     goto print_info
 )
 
-echo Iniciando o cluster do banco de dados...
-"%PG_BIN%\pg_ctl.exe" -D "%PG_DATA%" -l "%PG_LOG%" start
+rem 3. Se pg_ctl estiver disponivel no PATH do sistema
+where pg_ctl > nul 2>&1
+if %errorlevel% == 0 (
+    echo Iniciando PostgreSQL pelo sistema...
+    pg_ctl start
+    timeout /t 2 > nul
+    goto print_info
+)
 
-timeout /t 2 > nul
+echo.
+echo [Aviso] O PostgreSQL nao parece estar rodando na porta 5432.
+echo No computador da escola:
+echo   1. Inicie o servico do PostgreSQL (pelo menu Iniciar ou Services.msc)
+echo   2. Ou abra o DBeaver / pgAdmin e verifique a conexao na porta 5432.
+echo.
 
 :print_info
 echo.
 echo ========================================================
-echo   DADOS PARA CONEXAO NO DBEAVER:
+echo   DADOS PARA CONEXAO NO DBEAVER / PGADMIN:
 echo   - Host / Servidor:   localhost  (ou 127.0.0.1)
 echo   - Porta:             5432
 echo   - Banco de Dados:    locadora_xbox

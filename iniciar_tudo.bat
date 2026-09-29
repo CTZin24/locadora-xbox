@@ -36,7 +36,6 @@ echo.
 echo ========================================================
 echo   TUDO PRONTO!
 echo   - Aplicacao Web: http://localhost:3000
-echo   - Celular/Wi-Fi: http://192.168.1.6:3000
 echo   - DBeaver:       localhost:5432 (Banco: locadora_xbox, User: postgres)
 echo ========================================================
 pause

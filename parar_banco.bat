@@ -4,11 +4,12 @@ echo ========================================================
 echo   🛑 PARANDO POSTGRESQL (PORTA 5432)
 echo ========================================================
 
-set "PG_BIN=%~dp0pgsql\bin"
-set "PG_DATA=%~dp0pgsql\data"
-
-"%PG_BIN%\pg_ctl.exe" -D "%PG_DATA%" stop
-
-echo.
-echo PostgreSQL finalizado.
+if exist "%~dp0pgsql\bin\pg_ctl.exe" (
+    "%~dp0pgsql\bin\pg_ctl.exe" -D "%~dp0pgsql\data" stop
+    echo.
+    echo PostgreSQL portatil finalizado.
+) else (
+    echo [Info] PostgreSQL local portatil nao configurado nesta pasta.
+    echo Caso esteja rodando como servico do Windows (ex: no PC da escola), ele e gerenciado pelo proprio Windows.
+)
 pause

@@ -611,15 +611,16 @@ function getLocalIPv4List() {
 
 server.listen(PORT, '0.0.0.0', () => {
   const localIps = getLocalIPv4List();
-  const primaryLocalIp = localIps.find(i => i.name.toLowerCase().includes('ethernet') || i.name.toLowerCase().includes('wi-fi'))?.address || (localIps[0] ? localIps[0].address : '127.0.0.1');
+  const primaryLocalIp = localIps.find(i => i.name.toLowerCase().includes('ethernet') || i.name.toLowerCase().includes('wi-fi'))?.address || (localIps[0] ? localIps[0].address : 'localhost');
 
   console.log(`\n======================================================`);
   console.log(`  🎮 XBOX LOCADORA - Plataforma Web Responsiva`);
   console.log(`======================================================`);
-  console.log(`  🌐 Localhost:           http://localhost:${PORT}`);
-  console.log(`  📱 Celular / Wi-Fi:     http://${primaryLocalIp}:${PORT}`);
-  console.log(`  🌍 IP Público IPv4:     http://45.172.97.186:${PORT}`);
-  console.log(`  🐘 Banco de Dados:      Porta 5432 (banco: locadora_xbox)`);
+  console.log(`  🌐 Local (neste PC):      http://localhost:${PORT}`);
+  if (primaryLocalIp && primaryLocalIp !== '127.0.0.1' && primaryLocalIp !== 'localhost') {
+    console.log(`  📱 Celular (mesmo Wi-Fi): http://${primaryLocalIp}:${PORT}`);
+  }
+  console.log(`  🐘 Banco de Dados:        Porta ${process.env.DB_PORT || 5432} (banco: ${process.env.DB_NAME || 'locadora_xbox'})`);
   console.log(`======================================================\n`);
 });
 
