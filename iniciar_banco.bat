@@ -4,14 +4,28 @@ echo ========================================================
 echo   🐘 INICIANDO BANCO DE DADOS NA PORTA 5432
 echo ========================================================
 
-set "PG_BIN=%~dp0pgsql\bin"
-set "PG_DATA=%~dp0pgsql\data"
-set "PG_LOG=%~dp0pgsql\pgsql.log"
-
 rem Verifica se ja esta rodando na porta 5432
 netstat -ano | findstr ":5432 " | findstr "LISTENING" > nul
 if %errorlevel% == 0 (
     echo [OK] O banco de dados ja esta ativo na porta 5432!
+    goto print_info
+)
+
+rem Localiza os binarios do PostgreSQL
+if exist "%~dp0pgsql\bin\pg_ctl.exe" (
+    set "PG_BIN=%~dp0pgsql\bin"
+    set "PG_DATA=%~dp0pgsql\data"
+    set "PG_LOG=%~dp0pgsql\pgsql.log"
+) else if exist "C:\Users\eduar\.gemini\antigravity\scratch\xbox-biblioteca\pgsql\bin\pg_ctl.exe" (
+    set "PG_BIN=C:\Users\eduar\.gemini\antigravity\scratch\xbox-biblioteca\pgsql\bin"
+    set "PG_DATA=C:\Users\eduar\.gemini\antigravity\scratch\xbox-biblioteca\pgsql\data"
+    set "PG_LOG=C:\Users\eduar\.gemini\antigravity\scratch\xbox-biblioteca\pgsql\pgsql.log"
+) else if exist "C:\Program Files\PostgreSQL\16\bin\pg_ctl.exe" (
+    set "PG_BIN=C:\Program Files\PostgreSQL\16\bin"
+    set "PG_DATA=C:\Program Files\PostgreSQL\16\data"
+    set "PG_LOG=%~dp0pgsql.log"
+) else (
+    echo [Aviso] PostgreSQL local nao encontrado. Tentando servico do sistema...
     goto print_info
 )
 
