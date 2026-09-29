@@ -1,0 +1,26 @@
+{
+  "name": "xbox-game-hub",
+  "version": "1.0.0",
+  "description": "Plataforma Web Responsiva para Gerenciamento de Jogos Xbox (CRUD Completo com PostgreSQL)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "db:start": "iniciar_banco.bat",
+    "db:stop": "parar_banco.bat",
+    "db:reset": "resetar_banco.bat"
+  },
+  "keywords": [
+    "xbox",
+    "crud",
+    "postgresql",
+    "vanilla-javascript",
+    "html5",
+    "css3",
+    "mobile-first"
+  ],
+  "author": "Equipe Xbox Game Hub",
+  "license": "ISC",
+  "dependencies": {
+    "pg": "^8.13.1"
+  }
+}

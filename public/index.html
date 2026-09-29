@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#107c10">
+  <meta name="description" content="Xbox Locadora - Plataforma Web Responsiva para Gerenciamento de Jogos, Clientes e Locações">
+  <title>Xbox Locadora | Sistema de Gestão</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="./assets/xbox.ico" type="image/x-icon">
+</head>
+<body>
+  <!-- Cabeçalho Principal -->
+  <header class="app-header">
+    <div class="header-content">
+      <div class="brand">
+        <div aria-hidden="true">
+          <img src="assets/xbox.ico">
+        </div>
+        <div>
+          <h1 class="brand-title">XBOX LOCADORA</h1>
+          <p class="brand-subtitle">Locadora de Jogos Eletrônicos Xbox</p>
+        </div>
+      </div>
+
+      <div class="header-badges">
+        <div id="db-status-badge" class="status-badge connecting" title="Status de Operação">
+          <span class="status-dot"></span>
+          <span class="status-text">Conectando...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navegação Superior Desktop / Tablet -->
+    <nav class="desktop-nav" aria-label="Navegação Principal">
+      <button class="nav-btn active" data-view="dashboard">
+        <span class="nav-icon">📊</span>
+        <span>Início</span>
+      </button>
+      <button class="nav-btn" data-view="jogos">
+        <span class="nav-icon">🎮</span>
+        <span>Jogos</span>
+      </button>
+      <button class="nav-btn" data-view="clientes">
+        <span class="nav-icon">👥</span>
+        <span>Clientes</span>
+      </button>
+      <button class="nav-btn" data-view="locacoes">
+        <span class="nav-icon">🔄</span>
+        <span>Locações</span>
+      </button>
+      <button class="nav-btn" data-view="generos">
+        <span class="nav-icon">🏷️</span>
+        <span>Gêneros</span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- Conteúdo Principal das Telas -->
+  <main id="app-container" class="main-container">
+    
+    <!-- ==============================================
+         VIEW: DASHBOARD
+         ============================================== -->
+    <section id="view-dashboard" class="view-section active">
+      <div class="section-hero">
+        <h2>Painel da Locadora</h2>
+        <p>Gerenciamento completo do acervo de jogos Xbox, cadastro de clientes e controle de locações e devoluções.</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card" data-goto="jogos">
+          <div class="stat-icon-wrapper games">🎮</div>
+          <div class="stat-data">
+            <span class="stat-number" id="dash-total-jogos">0</span>
+            <span class="stat-label">Jogos no Catálogo</span>
+            <span class="stat-sub">Títulos Xbox disponíveis</span>
+          </div>
+        </div>
+
+        <div class="stat-card" data-goto="clientes">
+          <div class="stat-icon-wrapper members">👥</div>
+          <div class="stat-data">
+            <span class="stat-number" id="dash-total-clientes">0</span>
+            <span class="stat-label">Clientes Cadastrados</span>
+            <span class="stat-sub">Comunidade ativa</span>
+          </div>
+        </div>
+
+        <div class="stat-card warning" data-goto="locacoes">
+          <div class="stat-icon-wrapper loans">⏳</div>
+          <div class="stat-data">
+            <span class="stat-number" id="dash-locacoes-abertas">0</span>
+            <span class="stat-label">Jogos Alugados Agora</span>
+            <span class="stat-sub">Aguardando devolução</span>
+          </div>
+        </div>
+
+        <div class="stat-card" data-goto="generos">
+          <div class="stat-icon-wrapper genres">🏷️</div>
+          <div class="stat-data">
+            <span class="stat-number" id="dash-total-generos">0</span>
+            <span class="stat-label">Gêneros de Jogos</span>
+            <span class="stat-sub">Categorias do acervo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="quick-actions-bar">
+        <h3>Ações Rápidas</h3>
+        <div class="quick-buttons-row">
+          <button class="btn btn-primary" id="btn-quick-new-loan">
+            <span>+</span> Nova Locação
+          </button>
+          <button class="btn btn-secondary" id="btn-quick-new-game">
+            <span>+</span> Cadastrar Jogo
+          </button>
+          <button class="btn btn-secondary" id="btn-quick-new-client">
+            <span>+</span> Cadastrar Cliente
+          </button>
+        </div>
+      </div>
+
+      <div class="dashboard-recent">
+        <div class="sub-header-row">
+          <h3>Locações em Andamento</h3>
+          <button class="link-btn" data-goto="locacoes">Ver todas &rarr;</button>
+        </div>
+        <div id="dash-recent-loans" class="cards-list">
+          <div class="loading-state">Carregando dados...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         VIEW: JOGOS
+         ============================================== -->
+    <section id="view-jogos" class="view-section">
+      <div class="view-header">
+        <div>
+          <h2>Catálogo de Jogos Xbox</h2>
+          <p class="section-desc">Consulte, cadastre e gerencie os títulos disponíveis na locadora.</p>
+        </div>
+        <button class="btn btn-primary" id="btn-new-game">
+          <span>+</span> Novo Jogo
+        </button>
+      </div>
+
+      <div class="filter-bar">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="search" id="search-jogos" placeholder="Buscar jogo por título ou desenvolvedora..." autocomplete="off">
+        </div>
+        <div class="select-box">
+          <select id="filter-jogos-genero" aria-label="Filtrar por Gênero">
+            <option value="">Todos os Gêneros</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="list-jogos" class="cards-list">
+        <div class="loading-state">Carregando catálogo de jogos...</div>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         VIEW: CLIENTES
+         ============================================== -->
+    <section id="view-clientes" class="view-section">
+      <div class="view-header">
+        <div>
+          <h2>Clientes da Locadora</h2>
+          <p class="section-desc">Gerenciamento de membros e histórico de locações de cada jogador.</p>
+        </div>
+        <button class="btn btn-primary" id="btn-new-client">
+          <span>+</span> Novo Cliente
+        </button>
+      </div>
+
+      <div class="filter-bar">
+        <div class="search-box full-width">
+          <span class="search-icon">🔍</span>
+          <input type="search" id="search-clientes" placeholder="Buscar cliente por nome ou e-mail..." autocomplete="off">
+        </div>
+      </div>
+
+      <div id="list-clientes" class="cards-list">
+        <div class="loading-state">Carregando clientes...</div>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         VIEW: LOCAÇÕES
+         ============================================== -->
+    <section id="view-locacoes" class="view-section">
+      <div class="view-header">
+        <div>
+          <h2>Controle de Locações</h2>
+          <p class="section-desc">Acompanhe retiradas, devoluções e prazos dos jogos alugados.</p>
+        </div>
+        <button class="btn btn-primary" id="btn-new-loan">
+          <span>+</span> Nova Locação
+        </button>
+      </div>
+
+      <div class="tabs-filter">
+        <button class="tab-btn active" data-loan-filter="todos">Todas as Locações</button>
+        <button class="tab-btn" data-loan-filter="Em aberto">Em Aberto (Alugados)</button>
+        <button class="tab-btn" data-loan-filter="Devolvido">Devolvidos</button>
+      </div>
+
+      <div id="list-locacoes" class="cards-list">
+        <div class="loading-state">Carregando locações...</div>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         VIEW: GÊNEROS
+         ============================================== -->
+    <section id="view-generos" class="view-section">
+      <div class="view-header">
+        <div>
+          <h2>Gêneros de Jogos</h2>
+          <p class="section-desc">Classificação dos jogos por gênero (Ação, RPG, Corrida, etc.).</p>
+        </div>
+        <button class="btn btn-primary" id="btn-new-genre">
+          <span>+</span> Novo Gênero
+        </button>
+      </div>
+
+      <div class="filter-bar">
+        <div class="search-box full-width">
+          <span class="search-icon">🔍</span>
+          <input type="search" id="search-generos" placeholder="Buscar gênero..." autocomplete="off">
+        </div>
+      </div>
+
+      <div id="list-generos" class="cards-list">
+        <div class="loading-state">Carregando gêneros...</div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==============================================
+       BARRA DE NAVEGAÇÃO INFERIOR MOBILE
+       ============================================== -->
+  <nav class="bottom-nav" aria-label="Navegação Mobile">
+    <button class="bottom-nav-item active" data-view="dashboard">
+      <span class="bottom-icon">📊</span>
+      <span class="bottom-label">Início</span>
+    </button>
+    <button class="bottom-nav-item" data-view="jogos">
+      <span class="bottom-icon">🎮</span>
+      <span class="bottom-label">Jogos</span>
+    </button>
+    <button class="bottom-nav-item" data-view="locacoes">
+      <span class="bottom-icon">🔄</span>
+      <span class="bottom-label">Locações</span>
+    </button>
+    <button class="bottom-nav-item" data-view="clientes">
+      <span class="bottom-icon">👥</span>
+      <span class="bottom-label">Clientes</span>
+    </button>
+    <button class="bottom-nav-item" data-view="generos">
+      <span class="bottom-icon">🏷️</span>
+      <span class="bottom-label">Gêneros</span>
+    </button>
+  </nav>
+
+  <!-- ==============================================
+       MODAIS / FORMULÁRIOS
+       ============================================== -->
+
+  <!-- Modal: Jogo -->
+  <dialog id="modal-jogo" class="app-modal">
+    <div class="modal-dialog-content">
+      <div class="modal-header">
+        <h3 id="modal-jogo-title">Cadastrar Jogo</h3>
+        <button class="modal-close" aria-label="Fechar">&times;</button>
+      </div>
+      <form id="form-jogo" class="modal-form" novalidate>
+        <input type="hidden" id="jogo-id">
+        
+        <div class="form-group">
+          <label for="jogo-titulo">Título do Jogo <span class="required">*</span></label>
+          <input type="text" id="jogo-titulo" name="titulo" required placeholder="Ex: Halo Infinite, Forza Horizon 5" maxlength="150">
+          <span class="field-error" id="error-jogo-titulo"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="jogo-desenvolvedora">Desenvolvedora <span class="required">*</span></label>
+          <input type="text" id="jogo-desenvolvedora" name="desenvolvedora" required placeholder="Ex: Playground Games, 343 Industries, Bethesda" maxlength="100">
+          <span class="field-error" id="error-jogo-desenvolvedora"></span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="jogo-ano">Ano de Lançamento <span class="required">*</span></label>
+            <input type="number" id="jogo-ano" name="ano_lancamento" required min="1980" max="2035" placeholder="Ex: 2021">
+            <span class="field-error" id="error-jogo-ano"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="jogo-categoria">Gênero <span class="required">*</span></label>
+            <select id="jogo-categoria" name="id_categoria" required>
+              <option value="">Selecione um gênero...</option>
+            </select>
+            <span class="field-error" id="error-jogo-categoria"></span>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary btn-cancel-modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-jogo">Salvar Jogo</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- Modal: Cliente -->
+  <dialog id="modal-cliente" class="app-modal">
+    <div class="modal-dialog-content">
+      <div class="modal-header">
+        <h3 id="modal-cliente-title">Cadastrar Cliente</h3>
+        <button class="modal-close" aria-label="Fechar">&times;</button>
+      </div>
+      <form id="form-cliente" class="modal-form" novalidate>
+        <input type="hidden" id="cliente-id">
+
+        <div class="form-group">
+          <label for="cliente-nome">Nome Completo <span class="required">*</span></label>
+          <input type="text" id="cliente-nome" name="nome" required placeholder="Ex: Gabriel Mendes" maxlength="100">
+          <span class="field-error" id="error-cliente-nome"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="cliente-email">E-mail <span class="required">*</span></label>
+          <input type="email" id="cliente-email" name="email" required placeholder="Ex: gabriel@email.com" maxlength="100">
+          <span class="field-error" id="error-cliente-email"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="cliente-nascimento">Data de Nascimento</label>
+          <input type="date" id="cliente-nascimento" name="data_nascimento">
+          <span class="field-error" id="error-cliente-nascimento"></span>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary btn-cancel-modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-cliente">Salvar Cliente</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- Modal: Locação -->
+  <dialog id="modal-locacao" class="app-modal">
+    <div class="modal-dialog-content">
+      <div class="modal-header">
+        <h3 id="modal-locacao-title">Registrar Locação</h3>
+        <button class="modal-close" aria-label="Fechar">&times;</button>
+      </div>
+      <form id="form-locacao" class="modal-form" novalidate>
+        <input type="hidden" id="locacao-id">
+
+        <div class="form-group">
+          <label for="locacao-cliente">Cliente <span class="required">*</span></label>
+          <select id="locacao-cliente" name="id_cliente" required>
+            <option value="">Selecione o cliente...</option>
+          </select>
+          <span class="field-error" id="error-locacao-cliente"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="locacao-jogo">Jogo <span class="required">*</span></label>
+          <select id="locacao-jogo" name="id_jogo" required>
+            <option value="">Selecione o jogo...</option>
+          </select>
+          <span class="field-error" id="error-locacao-jogo"></span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="locacao-data">Data da Locação <span class="required">*</span></label>
+            <input type="date" id="locacao-data" name="data_locacao" required>
+            <span class="field-error" id="error-locacao-data"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="locacao-status">Situação <span class="required">*</span></label>
+            <select id="locacao-status" name="status" required>
+              <option value="Em aberto">Em aberto (Alugado)</option>
+              <option value="Devolvido">Devolvido</option>
+            </select>
+            <span class="field-error" id="error-locacao-status"></span>
+          </div>
+        </div>
+
+        <div class="form-group" id="group-data-devolucao">
+          <label for="locacao-devolucao">Data de Devolução</label>
+          <input type="date" id="locacao-devolucao" name="data_devolucao">
+          <span class="field-error" id="error-locacao-devolucao"></span>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary btn-cancel-modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-locacao">Salvar Locação</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- Modal: Gênero -->
+  <dialog id="modal-genero" class="app-modal">
+    <div class="modal-dialog-content">
+      <div class="modal-header">
+        <h3 id="modal-genero-title">Cadastrar Gênero</h3>
+        <button class="modal-close" aria-label="Fechar">&times;</button>
+      </div>
+      <form id="form-genero" class="modal-form" novalidate>
+        <input type="hidden" id="genero-id">
+
+        <div class="form-group">
+          <label for="genero-nome">Nome do Gênero <span class="required">*</span></label>
+          <input type="text" id="genero-nome" name="nome" required placeholder="Ex: RPG, Ação, Corrida, FPS" maxlength="50">
+          <span class="field-error" id="error-genero-nome"></span>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary btn-cancel-modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-genero">Salvar Gênero</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- Modal: Confirmação de Exclusão -->
+  <dialog id="modal-confirm-delete" class="app-modal modal-danger">
+    <div class="modal-dialog-content">
+      <div class="modal-header">
+        <h3>Confirmar Exclusão</h3>
+        <button class="modal-close" aria-label="Fechar">&times;</button>
+      </div>
+      <div class="confirm-body">
+        <div class="danger-icon" aria-hidden="true">⚠️</div>
+        <p id="confirm-delete-message">Tem certeza que deseja remover este item?</p>
+        <p class="danger-warning">Esta ação removerá o registro da locadora permanentemente.</p>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary btn-cancel-modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="btn-confirm-delete-action">Sim, Excluir</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Toasts de Feedback -->
+  <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Script da Aplicação -->
+  <script src="js/app.js"></script>
+</body>
+</html>
